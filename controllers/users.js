@@ -1,9 +1,9 @@
 const usersRouter = require("express").Router();
 const bcrypt = require("bcrypt");
-const User = require("../models/user");
+const { User } = require("../models");
 
 usersRouter.get("/", async (req, res) => {
-  const users = await User.find({});
+  const users = await User.findAll();
   res.json(users);
 });
 
@@ -23,16 +23,18 @@ usersRouter.post("/", async (req, res) => {
     const saltRounds = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    const user = new User ({
-      username,
-      name,
-      email,
-      passwordHash
-    });
-
-    const savedUser = await user.save();
-
-    res.status(201).json(savedUser);
+    try {
+      const savedUser = await User.create({
+        username,
+        name,
+        email,
+        passwordHash
+      });
+      return res.status(201).json(savedUser);
+    } catch (err) {
+      return res.status(400).json({ err });
+    }
+    
   }
 });
 
@@ -40,6 +42,16 @@ usersRouter.post("/", async (req, res) => {
 usersRouter.delete("/", async (req, res) => {
   await User.deleteMany({});
   res.status(204);
-})
+});
+
+usersRouter.delete("/:id", async (req, res) => {
+  const userToDelete = await User.findByPk(req.params.id);
+  if (userToDelete) {
+    await userToDelete.destroy();
+    return res.status(204).send("user successfully deleted");
+  }
+
+  return res.status(404).send("user with specified id not found");
+});
 
 module.exports = usersRouter;
