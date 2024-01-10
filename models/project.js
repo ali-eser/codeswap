@@ -17,6 +17,10 @@ Project.init({
     type: DataTypes.TEXT,
     allowNull: false
   },
+  likes: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   image: {
     type: DataTypes.BLOB,
     allowNull: true
