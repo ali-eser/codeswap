@@ -5,7 +5,7 @@ const { connectToDatabase } = require("./utils/db");
 const start = async () => {
   await connectToDatabase();
   app.listen(config.PORT, () => {
-    console.log(`Server running on port ${config.PORT}`)
+    console.log(`Server running on port ${config.PORT}`);
   });
 };
 

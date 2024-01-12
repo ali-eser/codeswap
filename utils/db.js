@@ -8,12 +8,12 @@ const sequelize = new Sequelize(DATABASE_URL, {
 const connectToDatabase = async () => {
   try {
     await sequelize.authenticate();
-    console.log("connected to the database")
+    console.log("connected to the database");
   } catch (err) {
-    console.log("Failed to connect to the database. Error: ", err.message)
-    return process.exit(1)
+    console.log("Failed to connect to the database. Error: ", err.message);
+    return process.exit(1);
   }
-  return null
+  return null;
 }
 
 module.exports = { connectToDatabase, sequelize };
