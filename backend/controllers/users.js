@@ -10,11 +10,11 @@ usersRouter.get("/", async (req, res) => {
 usersRouter.post("/", async (req, res) => {
   const { username, name, email, password } = req.body;
 
-  const isAlreadyUser = await User.findOne({ username: username });
+  const isAlreadyUser = await User.findOne({ where: { username: username } });
   if (!(username && password && email && name)) {
     return res.status(401).send("Missing credentials");
   } else if (isAlreadyUser) {
-    return res.status(401).send("Username already taken!");
+    return res.status(401).send(`Username (${isAlreadyUser.username}) already taken!`);
   } else if (username.length < 3 || password.length < 8) {
     return res.status(401).send(
       "Username and password should be at least 3 and 8 characters long, respectively"
