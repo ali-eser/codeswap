@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { initUser } from "./reducers/userReducer";
-import LoginForm from "./components/LoginForm"; 
-import loginService from "./services/loginService";
+import LoginForm from "./components/LoginForm";
+import NewUserForm from "./components/NewUserForm";
 
 const App = () => {
   const dispatch = useDispatch();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
 
-  const user = useSelector(({user}) => user);
+  const user = useSelector(({ user }) => user);
+  const notification = useSelector(({ notification }) => notification);
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem("loggedUser");
@@ -17,18 +16,7 @@ const App = () => {
       const user = JSON.parse(loggedUser);
       dispatch(initUser(user))
     }
-  }, [dispatch])
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const user = await loginService.login({ username, password });
-      window.localStorage.setItem("loggedUser", JSON.stringify(user));
-      dispatch(initUser(user));
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  }, [dispatch]);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -38,14 +26,12 @@ const App = () => {
 
   return (
     <div>
+      <h4>{notification}</h4>
       {!user && (
-        <LoginForm 
-        username={username} 
-        password={password}
-        handleUsernameChange={({ target }) => setUsername(target.value)}
-        handlePasswordChange={({ target }) => setPassword(target.value)}
-        handleSubmit={handleLogin} 
-      />
+        <div>
+          <LoginForm />
+          <NewUserForm />
+        </div>
       )}
       {user && (
         <div>
