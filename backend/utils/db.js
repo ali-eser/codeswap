@@ -7,8 +7,10 @@ const {
   DATABASE_PORT
 } = require("./config");
 
-const sequelize = new Sequelize(`postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}`, {
-  dialect: "postgres"
+const sequelize = new Sequelize(
+  `postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}`, {
+  dialect: "postgres",
+  logging: false
 });
 
 const connectToDatabase = async () => {
