@@ -1,10 +1,10 @@
 const usersRouter = require("express").Router();
 const bcrypt = require("bcrypt");
-const { User } = require("../models");
+const { User, Project } = require("../models");
 
 usersRouter.get("/", async (req, res) => {
-  const users = await User.findAll();
-  res.json(users);
+  const users = await User.findAll({ include: [{ model: Project, attributes: ["title"] }] });
+  return res.json(users);
 });
 
 usersRouter.post("/", async (req, res) => {
@@ -34,14 +34,13 @@ usersRouter.post("/", async (req, res) => {
     } catch (err) {
       return res.status(400).json({ err });
     }
-    
   }
 });
 
-// dev route to delete all users from database
+// dev route for deleting all users
 usersRouter.delete("/", async (req, res) => {
-  await User.deleteMany({});
-  res.status(204);
+  await User.destroy({ where: {} });
+  return res.status(204);
 });
 
 usersRouter.delete("/:id", async (req, res) => {
