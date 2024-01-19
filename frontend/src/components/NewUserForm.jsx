@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { defineNotification } from "../reducers/notificationReducer";
+import { useNavigate } from "react-router-dom";
 import userService from "../services/userService";
 
 const NewUserForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -23,6 +25,7 @@ const NewUserForm = () => {
           email: email
         };
         await userService.create(userToCreate);
+        navigate("/");
       } catch (err) {
         dispatch(defineNotification(err.response.data, 5));
       }
