@@ -19,7 +19,9 @@ const Navigation = ({ handleLogout }) => {
       )}
       {user && (
         <div>
+          <Link style={padding} to={`/users/${user.username}`}>{user.username}</Link>
           <Link style={padding} to="/home">Your Feed</Link>
+          <Link style={padding} to="/create">Create New Project</Link>
           <a href="" style={padding} onClick={handleLogout}>Log out</a>
         </div>
       )}
