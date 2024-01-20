@@ -32,7 +32,6 @@ projectsRouter.get("/:id", async (req, res) => {
 
 projectsRouter.post("/", async (req, res) => {
   const body = req.body;
-  const testuser = req.user;
 
   try {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
