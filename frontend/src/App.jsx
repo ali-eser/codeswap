@@ -1,35 +1,32 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { initUser } from "./reducers/userReducer";
-import { initializeProjects } from "./reducers/projectReducer";
-import { 
-  Routes, Route, Link, useMatch, useNavigate 
-} from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import projectService from "./services/projectService";
 import LoginForm from "./components/LoginForm";
 import NewUserForm from "./components/NewUserForm";
-import Project from "./components/Project";
+import Feed from "./components/Feed";
 import Navigation from "./components/Navigation";
+import CreateNewProject from "./components/CreateNewProject";
+import ProfilePage from "./components/ProfilePage";
+import ProjectPage from "./components/ProjectPage";
+import WelcomePage from "./components/WelcomePage";
+import { initializeProjects } from "./reducers/projectReducer";
+import { defineNotification } from "./reducers/notificationReducer";
 
 const App = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const user = useSelector(({ user }) => user);
+  const notification = useSelector(({ notification }) => notification);
+
   useEffect(() => {
     const loggedUser = window.localStorage.getItem("loggedUser");
     if (loggedUser) {
       const user = JSON.parse(loggedUser);
-      dispatch(initUser(user))
-    }
-  }, [dispatch]);
-
-  const user = useSelector(({ user }) => user);
-  const notification = useSelector(({ notification }) => notification);
-  const projects = useSelector(({ projects }) => projects);
-
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    } else {
+      dispatch(initUser(user));
+      projectService.setToken(user.token);
       dispatch(initializeProjects());
     }
   }, []);
@@ -37,7 +34,9 @@ const App = () => {
   const handleLogout = async (e) => {
     e.preventDefault();
     window.localStorage.clear();
+    dispatch(defineNotification(`${user.username} has logged out`, 5));
     dispatch(initUser(null));
+    navigate("/");
   };
 
   return (
@@ -47,6 +46,7 @@ const App = () => {
       {!user && (
         <div>
           <Routes>
+            <Route path={"/"} element={<WelcomePage />} />
             <Route path={"/login"} element={<LoginForm />} />
             <Route path={"/signin"} element={<NewUserForm />} />
           </Routes>
@@ -54,23 +54,17 @@ const App = () => {
       )}
       {user && (
         <div>
-          <div>
-            <h3>{user.username} logged in!</h3>
-            <button onClick={handleLogout}>Logout</button>
-          </div>
-            <div>
-              <h1>Projects</h1>
-              <div>
-                {projects.map(project => (
-                  <Project project={project} key={project.id}/>
-                ))}
-              </div>
-            </div>
+          <Routes>
+            <Route path={"/"} element={<WelcomePage />} />
+            <Route path={"/home"} element={<Feed />} />
+            <Route path={"/create"} element={<CreateNewProject />} />
+            <Route path={"/users/:username"} element={<ProfilePage />} />
+            <Route path={"/projects/:id"} element={<ProjectPage />} />
+          </Routes>
         </div>
-
       )}
     </div>
-  )
+  );
 };
 
 export default App;
