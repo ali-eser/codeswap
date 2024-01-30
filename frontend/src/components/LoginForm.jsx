@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { initUser } from "../reducers/userReducer"
+import { initUser } from "../reducers/userReducer";
+import { initializeProjects } from "../reducers/projectReducer";
 import { defineNotification } from "../reducers/notificationReducer";
 import loginService from "../services/loginService";
 
@@ -18,16 +19,17 @@ const LoginForm = () => {
       const user = await loginService.login({ username, password });
       window.localStorage.setItem("loggedUser", JSON.stringify(user));
       dispatch(initUser(user));
+      dispatch(initializeProjects());
       navigate("/home");
-      dispatch(defineNotification(`${user.username} has successfully logged in`, 5));
+      dispatch(defineNotification({text: `${user.username} has successfully logged in`, type: "success"}, 5));
     } catch (err) {
-      dispatch(defineNotification(err.response.data, 5));
+      dispatch(defineNotification({text: err.response.data, type: "error"}, 5));
     }
   };
 
   return (
-    <div>
-      <h3>Login</h3>
+    <div className={"page-body"+ " " +"general-item"}>
+      <h1 className="title">Login</h1>
       <form onSubmit={handleLogin}>
         <input type="text" name="username" id="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="username"/>
         <br />
