@@ -6,27 +6,23 @@ const Navigation = ({ handleLogout }) => {
   const user = useSelector(({ user }) => user);
 
   const padding = {
-    paddingRight: 5
+    paddingRight: 15,
   };
 
-  return (
-    <div>
-      {!user && (
-        <div>
-          <Link style={padding} to="/login">Login</Link>
-          <Link style={padding} to="/signin">Sign in</Link>
-        </div>
-      )}
-      {user && (
-        <div>
-          <Link style={padding} to={`/users/${user.username}`}>{user.username}</Link>
-          <Link style={padding} to="/home">Your Feed</Link>
-          <Link style={padding} to="/create">Create New Project</Link>
-          <a href="" style={padding} onClick={handleLogout}>Log out</a>
-        </div>
-      )}
-    </div>
-  );
+  if (user) {
+    return (
+      <div className={"navbar"+ " " + "general-item"}>
+          <div>
+            <Link style={padding} to={`/users/${user.username}`}>{user.username}</Link>
+            <Link style={padding} to="/home">Your Feed</Link>
+            <Link style={padding} to="/create">Create New Project</Link>
+            <a href="" onClick={handleLogout}>Log out</a>
+          </div>
+      </div>
+    );
+  } else {
+    return null;
+  }
 };
 
 Navigation.propTypes = {
