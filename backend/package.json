@@ -1,5 +1,5 @@
 {
-  "name": "project",
+  "name": "codeswap-backend",
   "version": "1.0.0",
   "description": "A portal for developers to share their projects",
   "main": "index.js",
