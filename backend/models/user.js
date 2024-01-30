@@ -12,7 +12,8 @@ User.init({
   username: {
     type: DataTypes.STRING,
     unique: true,
-    allowNull: false
+    allowNull: false,
+    collate: "C"
   },
   email: {
     type: DataTypes.STRING,
@@ -26,6 +27,10 @@ User.init({
   passwordHash: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  likedPosts: {
+    type: DataTypes.ARRAY(DataTypes.INTEGER),
+    allowNull: true
   }
 }, {
   sequelize,
