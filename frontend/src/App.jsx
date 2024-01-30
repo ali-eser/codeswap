@@ -29,12 +29,12 @@ const App = () => {
       projectService.setToken(user.token);
       dispatch(initializeProjects());
     }
-  }, []);
+  }, [dispatch]);
 
   const handleLogout = async (e) => {
     e.preventDefault();
     window.localStorage.clear();
-    dispatch(defineNotification(`${user.username} has logged out`, 5));
+    dispatch(defineNotification({text: `${user.username} has successfully logged out`, type: "success"}, 5));
     dispatch(initUser(null));
     navigate("/");
   };
@@ -42,7 +42,9 @@ const App = () => {
   return (
     <div>
       <Navigation handleLogout={handleLogout} />
-      <h4>{notification}</h4>
+      {notification && (
+        <h5 className={"notification"+ " " +"general-item"+ " " +`${notification.type}`}>{notification.text}</h5>
+      )}
       {!user && (
         <div>
           <Routes>
