@@ -13,6 +13,12 @@ const getAll = async () => {
   return res.data;
 };
 
+const getOne = async id => {
+  const res = await axios.get(`${baseURL}/${id}`);
+  console.log(res.data);
+  return res.data;
+};
+
 const addProject = async newProject => {
   const config = {
     headers: {Authorization: token}
@@ -21,4 +27,12 @@ const addProject = async newProject => {
   return project;
 };
 
-export default { getAll, addProject, setToken };
+const likeProject = async id => {
+  const config = {
+    headers: {Authorization: token}
+  };
+  const updatedProject = await axios.put(`${baseURL}/${Number(id)}`, null, config);
+  return updatedProject;
+};
+
+export default { getAll, addProject, likeProject, setToken, getOne };
