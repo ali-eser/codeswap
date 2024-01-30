@@ -20,4 +20,11 @@ export const initializeProjects = () => {
   }
 };
 
+export const setSingleProject = id => {
+  return async dispatch => {
+    const project = await projectService.getOne(id);
+    dispatch(setProjects(project));
+  }
+};
+
 export default projectSlice.reducer;
