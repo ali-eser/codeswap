@@ -33,6 +33,8 @@ projectsRouter.get("/:id", async (req, res) => {
 projectsRouter.post("/", async (req, res) => {
   const body = req.body;
 
+  console.log(req.files);
+
   try {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
     if (!decodedToken.id) {
@@ -49,16 +51,52 @@ projectsRouter.post("/", async (req, res) => {
         );
     }
 
+    let pathToImage = "";
+
+    if (req.files.length != 0) {
+      req.files
+      pathToImage = req.files[0].path;
+    } 
+
     const user = await User.findByPk(decodedToken.id)
     const project = await Project.create({
       title: body.title,
       description: body.description,
-      likes: 0,
+      likes: [],
+      imagePath: pathToImage,
       userId: user.id
     });
 
     return res.status(200).json(project);
 
+  } catch (err) {
+    return res.status(401).json({ error: err });
+  }
+});
+
+projectsRouter.put("/:id", async (req, res) => {
+  try {
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+    if (!decodedToken.id) {
+      return res.status(401).json({ error: "token invalid" });
+    }
+    let project = await Project.findByPk(req.params.id);
+
+    if (project.likes.includes(decodedToken.id)) {
+      let copy = project.likes;
+      const index = copy.indexOf(decodedToken.id);
+      copy = copy.splice(index, 1);
+      console.log(copy.splice(index, 1));
+      project.likes = copy.splice(index, 1);
+      console.log("liked by: ", project.likes);
+      await project.save();
+      console.log(project.likes);
+      return res.status(204);
+    } else {
+      project.likes = [...project.likes, decodedToken.id];
+      await project.save();
+      return res.status(204);
+    }
   } catch (err) {
     return res.status(401).json({ error: err });
   }
