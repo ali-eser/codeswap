@@ -2,6 +2,7 @@ const projectsRouter = require("express").Router();
 const jwt = require("jsonwebtoken");
 const { User, Project } = require("../models");
 
+// strip token from "Bearer" keyword
 const getTokenFrom = request => {
   const authorization = request.get("authorization");
   if (authorization && authorization.startsWith("Bearer ")) {
@@ -9,11 +10,13 @@ const getTokenFrom = request => {
   }
 };
 
+// fetch all projects
 projectsRouter.get("/", async (req, res) => {
   const projects = await Project.findAll({ include: [{ model: User, attributes: ["username"] }] });
   return res.status(200).json(projects);
 });
 
+// fetch a single project
 projectsRouter.get("/:id", async (req, res) => {
   try {
     const project = await Project.findByPk(req.params.id, { include: [{ model: User, attributes: ["username"] }] });
@@ -30,10 +33,9 @@ projectsRouter.get("/:id", async (req, res) => {
   }
 });
 
+// endpoint for posting a new project
 projectsRouter.post("/", async (req, res) => {
   const body = req.body;
-
-  console.log(req.files);
 
   try {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
@@ -51,8 +53,8 @@ projectsRouter.post("/", async (req, res) => {
         );
     }
 
+    // if req.files is empty, image path will be an empty string
     let pathToImage = "";
-
     if (req.files.length != 0) {
       req.files
       pathToImage = req.files[0].path;
@@ -74,6 +76,7 @@ projectsRouter.post("/", async (req, res) => {
   }
 });
 
+// endpoint for likes
 projectsRouter.put("/:id", async (req, res) => {
   try {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);

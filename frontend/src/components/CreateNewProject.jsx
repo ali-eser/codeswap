@@ -11,7 +11,7 @@ const CreateNewProject = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let image = e.target[2].files[0];
-    console.log(image);
+
     const newProject = {
       title: title,
       description: desc,
@@ -19,7 +19,7 @@ const CreateNewProject = () => {
     if (image) {
       const formData = new FormData();
       formData.append("files", image);
-      for (const [k, v] of Object.entries(newProject)) {
+      for (const [k, v] of Object.entries(newProject)) { // append title and description to formData
         formData.append(k, v)
       }
       await projectService.addProject(formData);
