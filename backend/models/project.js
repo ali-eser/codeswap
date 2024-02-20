@@ -21,12 +21,8 @@ Project.init({
     type: DataTypes.ARRAY(DataTypes.INTEGER),
     allowNull: true
   },
-  image: {
-    type: DataTypes.BLOB,
-    allowNull: true
-  },
-  comments: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
+  imagePath: {
+    type: DataTypes.STRING,
     allowNull: true
   }
 }, {
