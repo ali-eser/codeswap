@@ -21,8 +21,12 @@ const getOne = async id => {
 
 const addProject = async newProject => {
   const config = {
-    headers: {Authorization: token}
+    headers: {
+      Authorization: token,
+      "Content-Type": "multipart/form-data"
+    }
   };
+  console.log(token);
   const project = await axios.post(baseURL, newProject, config);
   return project;
 };
