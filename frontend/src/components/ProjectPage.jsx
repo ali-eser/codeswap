@@ -31,7 +31,9 @@ const ProjectPage = () => {
           </div>
           <hr />
           <p>{projectToShow.description}</p>
-          <img src={"http://localhost:3001/" + projectToShow.imagePath} alt="Project Image" width="400px" />
+          {projectToShow.imagePath && (
+            <img src={"http://localhost:3001/" + projectToShow.imagePath} alt="Project Image" width="400px" />
+          )}
           <h5>{likeCount}<a href="" onClick={handleLike}> &#9829;</a></h5>
         </div>
       )}
