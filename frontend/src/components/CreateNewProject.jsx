@@ -10,12 +10,22 @@ const CreateNewProject = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let image = e.target[2].files[0];
+    console.log(image);
     const newProject = {
       title: title,
       description: desc,
     };
-
-    await projectService.addProject(newProject);
+    if (image) {
+      const formData = new FormData();
+      formData.append("files", image);
+      for (const [k, v] of Object.entries(newProject)) {
+        formData.append(k, v)
+      }
+      await projectService.addProject(formData);
+    } else {
+      await projectService.addProject(newProject);
+    }
     setTitle("");
     setDesc("");
     navigate("/home");
@@ -25,13 +35,15 @@ const CreateNewProject = () => {
     <div className={"page-body"+ " " +"general-item"}>
       <h1 className="title">Create New Project</h1>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Title" onChange={(e) => setTitle(e.currentTarget.value)} />
+        <input type="text" id="title" placeholder="Project Title" size="30" onChange={(e) => setTitle(e.currentTarget.value)} />
         <br />
-        <textarea placeholder="Description" onChange={(e) => setDesc(e.currentTarget.value)} />
+        <textarea placeholder="Description (At least 20 characters)" cols="24" rows="5" onChange={(e) => setDesc(e.currentTarget.value)} />
         <br />
-        <input type="file" />
-        <br />
-        <button type="submit">Share</button>
+        <div style={{display: "flex", flexDirection: "column"}}>
+          <p style={{ fontSize: "0.75em", marginBottom: "2px" }}>Add an image (optional):</p>
+          <input type="file" name="files"/>
+        </div>
+        <button type="submit">Share Project</button>
       </form>
     </div>
   );
