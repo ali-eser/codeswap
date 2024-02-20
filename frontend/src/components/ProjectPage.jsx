@@ -12,8 +12,6 @@ const ProjectPage = () => {
     ? projects.find(p => p.id === Number(match.params.id))
     : null
 
-  
-  console.log(projectToShow.imagePath);
   const handleLike = async e => {
     e.preventDefault();
     console.log(projectToShow.id);
