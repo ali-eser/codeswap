@@ -18,7 +18,7 @@ Project.init({
     allowNull: false
   },
   likes: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
+    type: DataTypes.INTEGER,
     allowNull: true
   },
   imagePath: {
