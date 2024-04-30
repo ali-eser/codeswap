@@ -33,10 +33,18 @@ const addProject = async newProject => {
 
 const likeProject = async id => {
   const config = {
-    headers: {Authorization: token}
+    headers: { Authorization: token }
   };
   const updatedProject = await axios.put(`${baseURL}/${Number(id)}`, null, config);
   return updatedProject;
 };
 
-export default { getAll, addProject, likeProject, setToken, getOne };
+const deleteProject = async id => {
+  const config = {
+    headers: { Authorization: token }
+  };
+  const status = await axios.delete(`${baseURL}/${Number(id)}`, null, config);
+  return status;
+};
+
+export default { getAll, addProject, likeProject, setToken, getOne, deleteProject };
