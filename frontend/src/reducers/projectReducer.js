@@ -3,10 +3,11 @@ import projectService from "../services/projectService";
 
 const projectSlice = createSlice({
   name: "projects",
-  initialState: [],
+  initialState: { projects: [], loading: true },
   reducers: {
     setProjects (state, action) {
-      return action.payload
+      state.projects = action.payload;
+      state.loading = false;
     }
   }
 });
@@ -20,10 +21,9 @@ export const initializeProjects = () => {
   }
 };
 
-export const setSingleProject = id => {
+export const clearProjects = () => {
   return async dispatch => {
-    const project = await projectService.getOne(id);
-    dispatch(setProjects(project));
+    dispatch(setProjects([]));
   }
 };
 
