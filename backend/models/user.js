@@ -27,10 +27,6 @@ User.init({
   passwordHash: {
     type: DataTypes.STRING,
     allowNull: false
-  },
-  likedPosts: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
-    allowNull: true
   }
 }, {
   sequelize,
