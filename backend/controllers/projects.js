@@ -1,6 +1,6 @@
 const projectsRouter = require("express").Router();
 const jwt = require("jsonwebtoken");
-const { User, Project } = require("../models");
+const { User, Project, Like } = require("../models");
 
 // strip token from "Bearer" keyword
 const getTokenFrom = request => {
@@ -64,7 +64,7 @@ projectsRouter.post("/", async (req, res) => {
     const project = await Project.create({
       title: body.title,
       description: body.description,
-      likes: [],
+      likes: 0,
       imagePath: pathToImage,
       userId: user.id
     });
@@ -83,23 +83,23 @@ projectsRouter.put("/:id", async (req, res) => {
     if (!decodedToken.id) {
       return res.status(401).json({ error: "token invalid" });
     }
-    let project = await Project.findByPk(req.params.id);
 
-    if (project.likes.includes(decodedToken.id)) {
-      let copy = project.likes;
-      const index = copy.indexOf(decodedToken.id);
-      copy = copy.splice(index, 1);
-      console.log(copy.splice(index, 1));
-      project.likes = copy.splice(index, 1);
-      console.log("liked by: ", project.likes);
-      await project.save();
-      console.log(project.likes);
-      return res.status(204);
+    let project = await Project.findByPk(Number(req.params.id));
+    let user = await User.findByPk(Number(decodedToken.id));
+
+    let like = await Like.findOne({ where: {userId: user.id, projectId: req.params.id} });
+    console.log("likes: ", like);
+
+    if (like) {
+      await like.destroy()
+      await project.decrement("likes");
+      return res.status(200).json({ likes: project.likes });
     } else {
-      project.likes = [...project.likes, decodedToken.id];
-      await project.save();
-      return res.status(204);
+      await project.increment("likes");
+      await Like.create({ userId: user.id, projectId: req.params.id });
+      return res.status(200).json({ likes: project.likes });
     }
+
   } catch (err) {
     return res.status(401).json({ error: err });
   }
