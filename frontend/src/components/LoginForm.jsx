@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { initUser } from "../reducers/userReducer";
-import { initializeProjects } from "../reducers/projectReducer";
 import { defineNotification } from "../reducers/notificationReducer";
 import loginService from "../services/loginService";
 
@@ -17,10 +16,9 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const user = await loginService.login({ username, password });
+      navigate("/home");
       window.localStorage.setItem("loggedUser", JSON.stringify(user));
       dispatch(initUser(user));
-      dispatch(initializeProjects());
-      navigate("/home");
       dispatch(defineNotification({text: `${user.username} has successfully logged in`, type: "success"}, 5));
     } catch (err) {
       dispatch(defineNotification({text: err.response.data, type: "error"}, 5));
