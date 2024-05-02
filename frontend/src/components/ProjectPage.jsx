@@ -6,7 +6,12 @@ import { useEffect, useState } from "react";
 const ProjectPage = () => {
   const { projects, loading } = useSelector(({ projects }) => projects);
   const user = useSelector(({ user }) => user);
+
+  const [commentBox, setCommentBox] = useState("");
+  const [comments, setComments] = useState([]);
+
   const navigate = useNavigate();
+
   const match = useMatch("/projects/:id");
   const projectToShow = match
     ? projects.find(p => p.id === Number(match.params.id))
@@ -19,12 +24,11 @@ const ProjectPage = () => {
     if (projectToShow) {
       setIsLoading(false);
       setLikeCount(projectToShow.likes);
+      setComments(projectToShow.comments);
     }
   }, [projectToShow]);
 
-  console.log("projects state: ", projects);
-  console.log("projectToShow: ", projectToShow);
-  console.log(user);
+  console.log(comments);
 
   const handleLike = async e => {
     e.preventDefault();
@@ -35,13 +39,19 @@ const ProjectPage = () => {
   const handleDelete = async e => {
     e.preventDefault();
     const confirmation = prompt(`Type "${projectToShow.title}" below to confirm.\nPlease note that this action is irreversible!`);
-    console.log(confirmation);
     if (confirmation === projectToShow.title) {
       await projectService.deleteProject(projectToShow.id);
       navigate("/home");
     } else {
       alert("You have mistyped the title of the post.\nAction cancelled.")
     }
+  };
+
+  const handleComment = async e => {
+    e.preventDefault();
+    const comment = await projectService.postComment(commentBox, user.id, projectToShow.id);
+    console.log(comment);
+    setComments([...comments, comment.data]);
   };
 
   return (
@@ -52,7 +62,7 @@ const ProjectPage = () => {
         </div>
       ) : (
         projectToShow && (
-          <div>
+          <div style={{marginBottom: "100px"}}>
             <div style={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
               <p className="title">{projectToShow.title}</p>
               <p>submitted by <i><Link to={`/users/${projectToShow.user.username}`}>{projectToShow.user.username}</Link></i> on {projectToShow.createdAt.split("T")[0]}</p>
@@ -67,6 +77,23 @@ const ProjectPage = () => {
               {projectToShow.user.username === user.username && (
                 <h5><a href="" onClick={handleDelete}> Delete Post</a></h5>
               )}
+            </div>
+            <div>
+              <hr />
+              <h2>Comments ({projectToShow.comments.length})</h2>
+              <form onSubmit={handleComment}>
+                <textarea style={{ width: "100%" }} onChange={(e) => setCommentBox(e.currentTarget.value)} 
+                name="comment" id="comment" cols="" rows="4" placeholder="Comment here..."></textarea>
+                <button type="submit" >Comment</button>
+              </form>
+              {comments.map(c => (
+                <li style={{listStyle: "none", marginTop: "55px"}} key={c.id}>
+                  {c.text} <hr />
+                  <div style={{float: "right", marginTop: "0px"}}>
+                    <div>by <i><Link to={`/users/${c.username}`}>{c.username}</Link></i> on {c.createdAt.split("T")[0]}</div>
+                  </div>
+                </li>
+              ))}
             </div>
           </div>
         )
