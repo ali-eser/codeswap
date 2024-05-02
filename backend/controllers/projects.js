@@ -1,6 +1,6 @@
 const projectsRouter = require("express").Router();
 const jwt = require("jsonwebtoken");
-const { User, Project, Like } = require("../models");
+const { User, Project, Like, Comment } = require("../models");
 
 // strip token from "Bearer" keyword
 const getTokenFrom = request => {
@@ -12,14 +12,17 @@ const getTokenFrom = request => {
 
 // fetch all projects
 projectsRouter.get("/", async (req, res) => {
-  const projects = await Project.findAll({ include: [{ model: User, attributes: ["username"] }] });
+  const projects = await Project.findAll({ 
+    include: 
+    [{ model: User, attributes: ["username"] }, {model: Comment, attributes: ["id", "text", "username", "userId", "createdAt"]}] 
+  });
   return res.status(200).json(projects);
 });
 
 // fetch a single project
 projectsRouter.get("/:id", async (req, res) => {
   try {
-    const project = await Project.findByPk(req.params.id, { include: [{ model: User, attributes: ["username"] }] });
+    const project = await Project.findByPk(req.params.id, { include: [{ model: User, attributes: ["username"] }, {model: Comment, attributes: ["id","text", "userId", "createdAt"]}] });
     if (project) {
       return res.status(200).json(project);
     } else if (!project) {
