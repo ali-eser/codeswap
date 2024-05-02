@@ -6,6 +6,7 @@ const path = require("path");
 const usersRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
 const projectsRouter = require("./controllers/projects");
+const commentsRouter = require("./controllers/comments");
 
 const storage = multer.diskStorage({
   destination: "./uploads",
@@ -36,5 +37,6 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/projects", projectsRouter);
+app.use("/api/comments", commentsRouter);
 
 module.exports = app;
