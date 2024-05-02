@@ -47,4 +47,12 @@ const deleteProject = async id => {
   return status;
 };
 
-export default { getAll, addProject, likeProject, setToken, getOne, deleteProject };
+const postComment = async (comment, userId, projectId) => {
+  const config = {
+    headers: { Authorization: token }
+  };
+  const newComment = await axios.post(`/api/comments/${projectId}`, { "text": comment, "userId": userId }, config);
+  return newComment;
+};
+
+export default { getAll, addProject, likeProject, setToken, getOne, deleteProject, postComment };
