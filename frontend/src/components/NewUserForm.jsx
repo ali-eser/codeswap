@@ -37,7 +37,7 @@ const NewUserForm = () => {
 
   return (
     <div className={"page-body"+ " " +"general-item"}>
-      <h1 className="title">Create CodeSwap Account</h1>
+      <h1 className="title">Create a CodeSwap Account</h1>
       <form onSubmit={handleSubmit}>
         <input className="form-control" type="text" placeholder="username" onChange={(e) => setUsername(e.target.value)} />
         <br />
