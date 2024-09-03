@@ -39,17 +39,17 @@ const NewUserForm = () => {
     <div className={"page-body"+ " " +"general-item"}>
       <h1 className="title">Create CodeSwap Account</h1>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="username" onChange={(e) => setUsername(e.target.value)} />
+        <input className="form-control" type="text" placeholder="username" onChange={(e) => setUsername(e.target.value)} />
         <br />
-        <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+        <input className="form-control" type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
         <br />
-        <input type="password" placeholder="enter password again" onChange={(e) => setPasswordVerification(e.target.value)} />
+        <input className="form-control" type="password" placeholder="enter password again" onChange={(e) => setPasswordVerification(e.target.value)} />
         <br />
-        <input type="text" placeholder="name" onChange={(e) => setName(e.target.value)} />
+        <input className="form-control" type="text" placeholder="name" onChange={(e) => setName(e.target.value)} />
         <br />
-        <input type="text" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+        <input className="form-control" type="text" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
         <br />
-        <button type="submit">Create Account</button>
+        <button className="btn btn-secondary" type="submit">Create Account</button>
       </form>
     </div>
   );

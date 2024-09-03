@@ -52,6 +52,7 @@ const ProjectPage = () => {
     const comment = await projectService.postComment(commentBox, user.id, projectToShow.id);
     console.log(comment);
     setComments([...comments, comment.data]);
+    setCommentBox("")
   };
 
   return (
@@ -69,22 +70,33 @@ const ProjectPage = () => {
             </div>
             <hr />
             <p>{projectToShow.description}</p>
-            {projectToShow.imagePath && (
-              <img src={"http://localhost:3001/" + projectToShow.imagePath} alt="Project Image" width="400px" />
-            )}
+            <br />
+            <br />
+            <div id="img-div">
+                {projectToShow.imagePath && (
+                <img src={"http://localhost:3001/" + projectToShow.imagePath} alt="Project Image" width="400px" />
+                )}
+            </div>
+            <br />
+            <br />
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <h5>{likeCount}<a href="" onClick={handleLike}> &#9829;</a></h5>
-              {projectToShow.user.username === user.username && (
+                <br />
+                <h5>{likeCount}<a href="" onClick={handleLike}> &#9829;</a></h5>
+                    {projectToShow.user.username === user.username && (
                 <h5><a href="" onClick={handleDelete}> Delete Post</a></h5>
               )}
             </div>
             <div>
               <hr />
-              <h2>Comments ({projectToShow.comments.length})</h2>
+              <h4>Comments ({projectToShow.comments.length})</h4>
+              <br />
               <form onSubmit={handleComment}>
-                <textarea style={{ width: "100%" }} onChange={(e) => setCommentBox(e.currentTarget.value)} 
-                name="comment" id="comment" cols="" rows="4" placeholder="Comment here..."></textarea>
-                <button type="submit" >Comment</button>
+                <div>
+                    <textarea className="form-control" style={{ width: "100%" }} onChange={(e) => setCommentBox(e.currentTarget.value)} 
+                    name="comment" id="comment" cols="999" rows="2" placeholder="Write a comment"></textarea>
+                    <br />
+                    <button className="btn btn-primary" type="submit" >Comment</button>
+                </div>
               </form>
               {comments.map(c => (
                 <li style={{listStyle: "none", marginTop: "55px"}} key={c.id}>

@@ -46,28 +46,36 @@ const ProfilePage = () => {
     <div className={"page-body"+ " " +"general-item"}>
       {!ownProfile && (
         <div>
-          <h1 className="title">{match.params.username}</h1>
-          <button onClick={handleFollow}>{followText}</button>
+            <div className="profile-header">
+                <h1 className="title">{match.params.username}</h1>
+                <button id="follow-button" className="btn btn-secondary" onClick={handleFollow}>{followText}</button>
+            </div>
+          <hr />
+          <br />
         </div>
       )}
       {ownProfile && (
         <div>
           <h1 className="title">{match.params.username}</h1>
+          <hr />
+          <br />
         </div>
       )}
       {userProjects && (
         <div>
-          <h3>Projects</h3>
+          <h3>Projects by {match.params.username}</h3>
+          <br />
           <ul>
             {userProjects.map(p => (
-              <li key={p.id}><Link to={`/projects/${p.id}`}>{p.title}</Link></li>
+              <li className="profile-list" key={p.id}><Link to={`/projects/${p.id}`}>{p.title}</Link> <p><i>on {p.createdAt.split("T")[0]}</i></p> </li>
             ))}
           </ul>
         </div>
       )}
       {!userProjects && (
         <div>
-          <h3>This user has not posted any projects.</h3>
+          <h5>No posts found.</h5>
+          <br />
         </div>
       )}
     </div>

@@ -27,13 +27,13 @@ const LoginForm = () => {
 
   return (
     <div className={"page-body"+ " " +"general-item"}>
-      <h1 className="title">Login</h1>
+      <h1 className="title">Login to CodeSwap</h1>
       <form onSubmit={handleLogin}>
-        <input type="text" name="username" id="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="username"/>
+        <input className="form-control" type="text" name="username" id="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="username"/>
         <br />
-        <input type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="password"/>
+        <input className="form-control" type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="password"/>
         <br />
-        <button type="submit">Login</button>
+        <button className="btn btn-secondary" type="submit">Login</button>
       </form>
     </div>
   );
