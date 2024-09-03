@@ -60,7 +60,7 @@ a:hover {
 
 #welcome-page {
     margin: auto;
-    margin-top: 250px;
+    margin-top: 200px;
     max-height: fit-content;
 }
 
@@ -68,7 +68,6 @@ a:hover {
     display: flex;
     justify-content: space-between;
     max-width: 400px;
-    
     margin: auto;
     margin-top: 100px;
     font-size: 2em;
@@ -81,6 +80,7 @@ a:hover {
 
 #codeswap {
     font-size: 3.5em;
+    color: rgb(15, 0, 56);
     max-width: fit-content;
     margin: auto;
 }
