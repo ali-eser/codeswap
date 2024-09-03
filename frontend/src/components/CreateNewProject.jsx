@@ -1,8 +1,11 @@
+import { defineNotification } from "../reducers/notificationReducer";
+import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import projectService from "../services/projectService";
 
 const CreateNewProject = () => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
 
@@ -16,34 +19,44 @@ const CreateNewProject = () => {
       title: title,
       description: desc,
     };
-    if (image) {
-      const formData = new FormData();
-      formData.append("files", image);
-      for (const [k, v] of Object.entries(newProject)) { // append title and description to formData
-        formData.append(k, v)
+
+    try {
+      if (image) {
+        const formData = new FormData();
+        formData.append("files", image);
+        for (const [k, v] of Object.entries(newProject)) { // append title and description to formData
+          formData.append(k, v)
+        }
+        await projectService.addProject(formData);
+      } else {
+        await projectService.addProject(newProject);
       }
-      await projectService.addProject(formData);
-    } else {
-      await projectService.addProject(newProject);
+      setTitle("");
+      setDesc("");
+      navigate("/home");
+      dispatch(defineNotification({ text: `Successfully posted`, type: "success" }, 5))
+    } catch (err) {
+      console.log(err)
+      dispatch(defineNotification({ text: `${err.response.data}`, type: "error" }, 5))
     }
-    setTitle("");
-    setDesc("");
-    navigate("/home");
   };
 
   return (
     <div className={"page-body"+ " " +"general-item"}>
       <h1 className="title">Create New Project</h1>
+      <hr />
+      <br />
       <form onSubmit={handleSubmit}>
-        <input type="text" id="title" placeholder="Project Title" size="30" onChange={(e) => setTitle(e.currentTarget.value)} />
+        <input className="form-control" type="text" id="title" placeholder="Project Title" size="30" onChange={(e) => setTitle(e.currentTarget.value)} />
         <br />
-        <textarea placeholder="Description (At least 20 characters)" cols="24" rows="5" onChange={(e) => setDesc(e.currentTarget.value)} />
+        <textarea className="form-control" placeholder="Description (At least 20 characters)" cols="24" rows="5" onChange={(e) => setDesc(e.currentTarget.value)} />
         <br />
         <div style={{display: "flex", flexDirection: "column"}}>
           <p style={{ fontSize: "0.75em", marginBottom: "2px" }}>Add an image (optional):</p>
           <input type="file" name="files"/>
+          <br />
         </div>
-        <button type="submit">Share Project</button>
+        <button className="btn btn-secondary" type="submit">Share Project</button>
       </form>
     </div>
   );
