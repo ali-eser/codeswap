@@ -6,6 +6,7 @@ import userService from "../services/userService";
 const Feed = () => {
   const { projects, loading } = useSelector(({ projects }) => projects);
   const user = useSelector(({ user }) => user);
+  const [isFollowing, setIsFollowing] = useState(false);
   const [followedProjects, setFollowedProjects] = useState([]);
   const [shouldFetchFollowings, setShouldFetchFollowings] = useState(false);
 
@@ -23,8 +24,14 @@ const Feed = () => {
   useEffect(() => {
     const getFollowingsArray = async () => {
       const followings = await userService.getFollowings(user.id);
-      const tempArr = projects.filter(project => followings.data.includes(project.userId));
-      setFollowedProjects(tempArr);
+      console.log(followings.data.length)
+      if (followings.data.length === 0 ) {
+        setIsFollowing(false);
+      } else {
+        setIsFollowing(true);
+        const tempArr = projects.filter(project => followings.data.includes(project.userId));
+        setFollowedProjects(tempArr);
+      }
     }
     if (shouldFetchFollowings) {
       getFollowingsArray();
@@ -36,11 +43,14 @@ const Feed = () => {
     console.log(followedProjects);
  }, [followedProjects]);
 
+
   return (
     <div className={"page-body"+ " " +"general-item"}>
       {!match && (
         <div>
           <h1 className="title">Your Feed</h1>
+          <hr />
+          <br />
           <ul>
           {projects.map(p => (
             <li key={p.id}>
@@ -55,9 +65,16 @@ const Feed = () => {
           </ul>
         </div>
       )}
-      {match && (
+			{match && !isFollowing && (
+				<div>
+					<h3 style={{  maxWidth: "fit-content", margin: "auto" }}>You are not following anyone.</h3>
+				</div>
+			)}
+      {match && isFollowing && (
         <div>
           <h1 className="title">Posts by followed users</h1>
+          <hr />
+          <br />
           <ul>
             {followedProjects.map(p => (
                 <li key={p.id}>
