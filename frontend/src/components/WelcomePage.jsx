@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-
 const WelcomePage = () => {
   const navigate = useNavigate();
   const user = useSelector(({ user }) => user);
