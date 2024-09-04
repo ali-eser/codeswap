@@ -4,7 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from "./App.jsx";
 
-import userSlice from "./reducers/userReducer";
+import userSlice from "./reducers/userReducer.js";
 import notificationSlice from './reducers/notificationReducer.js';
 import projectSlice from './reducers/projectReducer.js';
 
