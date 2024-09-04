@@ -12,6 +12,7 @@ const Feed = () => {
 
   // add logic for filtering projects!!
   const match = useMatch("/home/following");
+  console.log(projects.length)
 
   useEffect(() => {
     if (!loading) {
@@ -63,6 +64,13 @@ const Feed = () => {
             </li>
           ))}
           </ul>
+        </div>
+      )}
+      {!match && projects.length === 0 && (
+        <div>
+          <h4 style={{  maxWidth: "fit-content", margin: "auto" }}>Nothing to show here yet.</h4>
+          <br />
+          <br />
         </div>
       )}
 			{match && !isFollowing && (
