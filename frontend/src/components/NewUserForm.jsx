@@ -32,7 +32,6 @@ const NewUserForm = () => {
     } else if (password != passwordVerification) {
       dispatch(defineNotification("Passwords do not match!", 5));
     }
-
   };
 
   return (
